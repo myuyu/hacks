@@ -1,16 +1,21 @@
-use std::borrow::Cow;
+use std::{borrow::Cow, io::{BufRead, BufReader}};
 use url::Url;
-use clap::{Arg, App,AppSettings};
+use clap::{App,AppSettings};
 
 fn main(){
     let app = App::new("rqreplace").setting(AppSettings::ArgRequiredElseHelp).args_from_usage(
         "-v, --value=[VALUE] 'New value for params'
-         -u, --url=[URL] 'URL'"
+         -f, --file=[URL] 'File contain list of urls'"
     ).get_matches();
     let inject = app.value_of("value").unwrap();
-    let m = Url::parse(app.value_of("url").unwrap()).unwrap();
+    let v = std::fs::File::open(app.value_of("file").unwrap()).expect("Soemthing wrong with file or path");
+    for h in BufReader::new(v).lines(){
+        qrs(&h.unwrap(), inject)
+    }
+}
+fn qrs(url: &str,inject: &str){
+    let m = Url::parse(url).unwrap();
     let v: Vec<_> = m.query_pairs().map(|(k,v)|{(k,inject)}).collect();
-    // build(, v);
     build(&m,v);
 }
 
