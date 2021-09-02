@@ -1,8 +1,8 @@
 ## Install : 
 1. git clone https://github.com/myuyu/hacks
 2. cd hacks/rwhoxy
-3. cargo build
-4. mv target/debug/rwhoxy /usr/bin/rwhoxy
+3. cargo build --release
+4. mv target/release/rwhoxy /usr/bin/rwhoxy
 
 Set whoxy API key : 
 ```
